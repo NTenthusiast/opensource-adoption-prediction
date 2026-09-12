@@ -1,0 +1,11 @@
+﻿feature,mean_abs_shap,feature_cn
+usage_lag1,0.13452251654634875,历史惯性 t-1
+desire_lag1,0.006652190527050061,渴望率 t-1
+usage_lag2,0.0011011867822917898,历史惯性 t-2
+usage_lag3,0.0005211253827300921,历史惯性 t-3
+desire_gap_lag1,0.00020109257653774923,渴望缺口 t-1
+admiration_lag1,8.115793615705602e-05,欣赏率 t-1
+category_Language,7.402578650413843e-05,category_Language
+category_Platform,3.161480810218016e-05,category_Platform
+category_Webframework,3.085916964256133e-05,category_Webframework
+category_Database,8.023458151475653e-06,category_Database

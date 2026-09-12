@@ -1,0 +1,26 @@
+# 数据：原始 Stack Overflow 调查数据体积大、可在线下载，不入库
+code/data/raw/
+*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# LaTeX 编译产物
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdf
+
+# IDE
+.idea/
+.vscode/
+.claude/
+
+# 系统
+.DS_Store
+Thumbs.db
