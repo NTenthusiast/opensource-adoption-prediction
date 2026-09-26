@@ -21,6 +21,8 @@ REPOS = {
     "Flask": "pallets/flask",
     "Fastify": "fastify/fastify",
     "Phoenix": "phoenixframework/phoenix",
+    "Ruby": "ruby/ruby",
+    "Kotlin": "JetBrains/kotlin",
 }
 YEARS = range(2018, 2024)
 PER_PAGE = 100
@@ -54,10 +56,8 @@ def yearly_counts(repo):
             cache[page] = json.loads(api(repo, page))
         return cache[page]
 
-    if n_pages >= 300:
-        raise RuntimeError(f"{repo} 达到 API 300 页上限，不能保证完整计数")
     if page_data(n_pages)[-1]["created_at"] < "2024-01-01":
-        raise RuntimeError(f"{repo} 的分页未覆盖完整研究窗口")
+        raise RuntimeError(f"{repo} 的分页未覆盖完整研究窗口，不能保证计数")
 
     def lower_bound(dt):
         lo, hi = 1, n_pages
@@ -78,16 +78,25 @@ def yearly_counts(repo):
 
 def main():
     if "--probe" in sys.argv:
-        candidates = ["jquery/jquery", "fastify/fastify", "phoenixframework/phoenix",
-                      "elixir-lang/elixir", "scala/scala", "neo4j/neo4j"]
+        candidates = ["Erlang/OTP", "JuliaLang/julia", "JetBrains/kotlin",
+                      "PowerShell/PowerShell", "openjdk/jdk", "denoland/deno",
+                      "php/php-src", "facebook/react", "neo4j/neo4j"]
         for repo in candidates:
-            pages = last_page(repo)
-            vals = json.loads(api(repo, pages))
-            print(repo, pages, vals[0]["created_at"] if vals else "空",
-                  vals[-1]["created_at"] if vals else "空", flush=True)
+            try:
+                pages = last_page(repo)
+                vals = json.loads(api(repo, pages))
+                print(repo, pages, vals[0]["created_at"] if vals else "空",
+                      vals[-1]["created_at"] if vals else "空", flush=True)
+            except RuntimeError as exc:
+                print(repo, "不可用：", exc, flush=True)
         return
+    selected = sys.argv[1:]
+    unknown = sorted(set(selected) - set(REPOS))
+    if unknown:
+        raise ValueError(f"未知技术：{unknown}；可选：{list(REPOS)}")
+    chosen = {k: v for k, v in REPOS.items() if not selected or k in selected}
     rows = []
-    for tech, repo in REPOS.items():
+    for tech, repo in chosen.items():
         counts, pages, calls = yearly_counts(repo)
         print(f"{tech}: 仓库={repo}, 总页数={pages}, 已读取页数={calls}", flush=True)
         for year, count in counts:
@@ -96,7 +105,12 @@ def main():
                          "issue_pr_comments": count,
                          "collected_utc": datetime.now(timezone.utc).isoformat()})
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(rows).to_csv(OUT, index=False, encoding="utf-8-sig")
+    fresh = pd.DataFrame(rows)
+    if selected and OUT.exists():
+        previous = pd.read_csv(OUT, encoding="utf-8-sig")
+        fresh = pd.concat([previous[~previous.tech.isin(chosen)], fresh], ignore_index=True)
+        fresh = fresh.drop_duplicates(["tech", "year"], keep="last")
+    fresh.sort_values(["tech", "year"]).to_csv(OUT, index=False, encoding="utf-8-sig")
     print(f"已保存 {OUT}")
 
 

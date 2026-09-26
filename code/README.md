@@ -1,6 +1,6 @@
 # 开源技术采纳率预测与竞争力归因研究 ——「不足与后续工作」代码库
 
-> **新实验**：`08_collect_github_comments.py` 采集五个公开主仓的年度 Issue/PR 对话评论计数；`09_validate_multisignal_warning.py` 以前瞻方式检验旧预警对下一年使用率、想用率、欣赏率及外部评论量的对应，并输出逐项明细；`make_multisignal_ppt.py` 生成本次组会 PPT。完整口径与结果见仓库根目录的 `研究记录_多源因变量与动态预警.md`。以下内容是 8.26 阶段记录，其中“留存率”“转化率”“净流出”等个人行为解释不再沿用。
+> **新实验**：`08_collect_github_comments.py` 采集七个公开主仓的年度 Issue/PR 对话评论计数；`09_validate_multisignal_warning.py` 回测旧规则；`10_compare_multisignal_warning.py` 把评论变化真正纳入动态预警，并在相同样本上比较旧规则、评论规则和双源规则；`test_multisignal_warning.py` 检查未来信息没有进入警报；`make_multisignal_ppt_v2.py` 生成升级版组会 PPT。完整口径与结果见仓库根目录的 `研究记录_多源因变量与动态预警.md`。以下内容是早期阶段记录，其中“留存率”“转化率”“净流出”等个人行为解释不再沿用。
 
 本目录完整实现了上次组会 PPT《开源技术采纳率预测与竞争力归因研究》中
 「**不足与未来研究方向**」一节提出的 **五项后续工作**，并基于 **Stack Overflow

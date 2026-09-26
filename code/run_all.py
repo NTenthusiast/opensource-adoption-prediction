@@ -13,7 +13,8 @@
 
 流程：
     02 构建面板 -> 03 真实数据回归验证 -> 04 SHAP 归因
-    -> 05 图特征 -> 06 三模型对比 -> 07 三维预警系统
+    -> 05 图特征 -> 06 三模型对比 -> 07 早期预警基线
+    -> 09 原规则回测 -> 10 双源动态预警回测
 （01 数据下载默认自动判断，仅当 data/raw/ 缺文件时才联网下载）
 """
 import os
@@ -31,6 +32,8 @@ STEPS = [
     "05_graph_features.py",
     "06_boosting_models.py",
     "07_early_warning_system.py",
+    "09_validate_multisignal_warning.py",
+    "10_compare_multisignal_warning.py",
 ]
 
 
