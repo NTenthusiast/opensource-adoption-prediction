@@ -143,25 +143,33 @@ def main():
     add_text(s, "2024 年这组技术没有下一年下降；找回率的分母为零，故显示“—”。",
              0.82, 5.53, 11.6, 0.92, 19, ORANGE)
 
-    s = slide(prs, "看几条真实记录如何判定", "示例取自 2024 年预警；2025 年问卷结果只用于事后核验")
-    examples = so[so.year == 2024].sort_values(["alert_score", "usage"], ascending=False).head(6)
-    rows = [["技术", "当年问卷", "当年评论", "当年输出", "后续使用率"]]
-    for _, item in examples.iterrows():
-        rows.append([item.tech, "警报" if item.so_alert else "无",
-                     "警报" if item.gh_alert else "无", item["状态"],
-                     "下降" if item.usage_down else "未下降"])
-    table(s, rows, 0.73, 1.5, [2.4, 1.7, 1.7, 3.8, 2.7], 0.67, 16)
-    add_text(s, "本页仅示例决策过程；总体结论以全部记录的回测表为准。",
-             0.83, 6.41, 11.5, 0.46, 17, TEAL)
+    s = slide(prs, "看真实记录：命中、误报与漏报", "跨预警年份分层举例；双源规则以问卷与评论同时报警为准")
+    # 各类判定各取示例，避免只展示最近一年未下降的记录。
+    chosen = [(2022, "Express"), (2023, "Gatsby"), (2023, "Flask"),
+              (2024, "jQuery"), (2023, "Redis"), (2023, "FastAPI")]
+    rows = [["预警年", "技术", "问卷", "评论", "双源输出", "使用率→下一年", "事后判定"]]
+    for year, tech in chosen:
+        item = so[(so.year == year) & (so.tech == tech)].iloc[0]
+        verdict = ("命中" if item.usage_down else "误报") if item.double_alert else (
+            "漏报" if item.usage_down else "正确未报")
+        rows.append([year, tech, "警报" if item.so_alert else "无",
+                     "警报" if item.gh_alert else "无",
+                     "警报" if item.double_alert else "不警报",
+                     f"{item.usage:.2%}→{item.next_usage:.2%}", verdict])
+    table(s, rows, 0.71, 1.47, [1.06, 2.03, 1.32, 1.32, 1.78, 2.45, 2.34], 0.66, 15)
+    true_negative = len(so) - int(so_dual["命中"] + so_dual["误报"] + so_dual["漏报"])
+    add_text(s, f"分层示例并非随机样本；完整 {len(so)} 条中：命中 {int(so_dual['命中'])}、"
+                f"误报 {int(so_dual['误报'])}、漏报 {int(so_dual['漏报'])}、正确未报 {true_negative}。",
+             0.82, 6.34, 11.6, 0.53, 16, TEAL)
 
-    s = slide(prs, "当前可用的核查清单", "依据 2025 年完整问卷与主仓评论；2026 年结果尚未用于回测")
+    s = slide(prs, "待核查清单：尚未验证", "依据 2025 年完整问卷与主仓评论；2026 年结果尚未用于回测")
     rows = [["技术", "问卷", "评论", "输出", "使用率"]]
     for _, item in latest.head(7).iterrows():
         rows.append([item.tech, "警报" if item.so_alert else "无",
                      "警报" if item.gh_alert else "无", item["状态"],
                      f"{item.usage:.1%}"])
     table(s, rows, 0.73, 1.37, [2.25, 1.6, 1.6, 4.55, 2.3], 0.62, 16)
-    add_text(s, f"共 {len(latest)} 项有两路历史；此处展示优先核查的前 7 项。",
+    add_text(s, f"共 {len(latest)} 项有两路历史；此处仅展示人工核查顺序，不能当成有效预测。",
              0.82, 6.54, 11.6, 0.35, 16, TEAL)
 
     s = slide(prs, "必须单看 2025 年问卷的整体上移", "诊断表：multisignal_recent_survey_shift.csv；survey_coverage_recent.csv")
@@ -176,8 +184,8 @@ def main():
     add_text(s, f"语言使用题有效回答：2024 年 {int(lang.loc[2024, '使用题有效回答数']):,} 人，"
                 f"2025 年 {int(lang.loc[2025, '使用题有效回答数']):,} 人。",
              0.81, 3.72, 11.6, 0.83, 21)
-    add_text(s, f"只看预警年 2022—2023：{int(stable_old['样本'])} 条记录；"
-                f"双源命中率 {stable_dual['精确率']:.1%}，旧规则 {stable_old['精确率']:.1%}。",
+    add_text(s, f"较早两组预警年合计 {int(stable_old['样本'])} 条："
+                f"双源命中率 {stable_dual['精确率']:.1%}，旧规则 {stable_old['精确率']:.1%}；仅用于定位跨年差异。",
              0.81, 4.95, 11.6, 1.0, 20, TEAL)
     add_text(s, "这提示调查受访者或选项口径可能变化；不能把整体上移直接解释为技术都增长。",
              0.81, 6.18, 11.6, 0.65, 18, ORANGE)
@@ -192,12 +200,12 @@ def main():
     add_text(s, "仓库按可核验的完整年度计数纳入，不能代表所有开源技术。",
              0.83, 5.67, 11.55, 0.9, 20, ORANGE)
 
-    s = slide(prs, "结论：扩大样本后保留有条件的预警用途", "逐项结果、仓库和年份均可在本项目 CSV 中复核")
+    s = slide(prs, "结论：近期样本尚不能支持直接应用", "逐项结果、仓库和年份均可在本项目 CSV 中复核")
     add_text(s, f"使用率下降检验：双源命中率 {so_dual['精确率']:.1%}，找回率 {so_dual['召回率']:.1%}。",
              0.83, 1.51, 11.7, 0.83, 24, TEAL, True)
     add_text(s, f"原问卷规则：命中率 {so_old['精确率']:.1%}，找回率 {so_old['召回率']:.1%}。",
              0.83, 2.78, 11.7, 0.8, 23)
-    add_text(s, "双源可用于优先核查的候选；2025 年问卷整体上移使未来稳定性仍待验证。",
+    add_text(s, "最近一组（2024 年预警）双源 3 次警报全部误报，不能据合并命中率直接部署。",
              0.83, 4.25, 11.55, 1.02, 22)
     add_text(s, "扩大样本提升了观察范围，不能自动消除样本选择和跨平台口径问题。",
              0.83, 5.77, 11.55, 0.82, 19, ORANGE)
