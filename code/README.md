@@ -1,6 +1,22 @@
 # 开源技术采纳率预测与竞争力归因研究 ——「不足与后续工作」代码库
 
-> **新实验**：`08_collect_github_comments.py` 采集七个公开主仓的年度 Issue/PR 对话评论计数；`09_validate_multisignal_warning.py` 回测旧规则；`10_compare_multisignal_warning.py` 把评论变化真正纳入动态预警，并在相同样本上比较旧规则、评论规则和双源规则；`test_multisignal_warning.py` 检查未来信息没有进入警报；`make_multisignal_ppt_v2.py` 生成升级版组会 PPT。完整口径与结果见仓库根目录的 `研究记录_多源因变量与动态预警.md`。以下内容是早期阶段记录，其中“留存率”“转化率”“净流出”等个人行为解释不再沿用。
+> **近期扩样实验**：`11_build_extended_panel.py` 接续官方 2023—2025 年问卷；`collect_recent_study.py` 汇总 27 个公开主仓的完整年度评论计数；`12_extended_multisignal_warning.py` 用相同规则重跑 2022—2024 年预警；`make_multisignal_ppt_v3.py` 生成当前升级版 PPT。使用率下降有 59 条可评估记录，评论量下降有 61 条。逐年结果与 2025 年调查整体上移诊断见仓库根目录的 `研究记录_多源因变量与动态预警.md`。以下内容是早期阶段记录，其中“留存率”“转化率”“净流出”等个人行为解释不再沿用。
+
+## 近期扩样回测：独立复现
+
+在仓库根目录依次运行：
+
+```bash
+python code/01_download_data.py
+python code/11_build_extended_panel.py
+python code/collect_recent_study.py
+python code/12_extended_multisignal_warning.py
+python code/make_multisignal_ppt_v3.py
+```
+
+首次下载 2023—2025 年官方调查 CSV 需要较大磁盘与网络空间；原始文件保存在 `code/data/raw/`，不会提交 Git。GitHub 采集需要已登录的 `gh` CLI。处理后的面板、仓库年度计数、逐项回测、逐年指标和 PPT 均随仓库提供，不必重新下载即可检查结果。
+
+本轮保持原问卷、评论、双源及任一信号四种规则和零变化阈值。2024 年预警对应的 2025 年问卷使用率在本轮 25 项可评估技术中全部上升，而整个面板两年都有的 101 项中 87 项上升，须把逐年表与合并表一起看。
 
 本目录完整实现了上次组会 PPT《开源技术采纳率预测与竞争力归因研究》中
 「**不足与未来研究方向**」一节提出的 **五项后续工作**，并基于 **Stack Overflow
@@ -102,8 +118,7 @@ code/
 
 1. **跨年技术名对齐**：不同年份存在 `Bash/Shell`、`Bash/Shell/PowerShell` 等变体，
    当前仅做基础归一化，仍有少量技术被拆成多行；可进一步完善别名表。
-2. **年份窗口**：本阶段用 2018–2022（口径一致、链接稳定）；`01_download_data.py`
-   与 `config.DOWNLOAD_URLS` 已支持一键扩展到 2016–2017 / 2023–2024。
+2. **年份窗口**：早期建模用 2018–2022；近期双源预警另建 2018–2025 扩展面板，并用 2022–2024 年预警检查截至 2025 年的结果。调查技术选项、有效回答数会跨年变化。
 3. **因果性**：回归揭示的是统计关联，「渴望→采纳」的因果方向仍需工具变量或
    准实验设计进一步确认。
 4. **图特征**：当前为静态节点特征；可将时序图神经网络（如 TGAT）作为后续方向。

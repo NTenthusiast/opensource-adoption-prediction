@@ -1,0 +1,26 @@
+﻿tech,category,repo,year,usage,desire_gap,issue_pr_comments,so_alert,gh_alert,alert_score,状态
+C#,Language,dotnet/csharplang,2025,0.2794985949291149,-0.0863566038331596,241,True,True,2,双源收缩
+jQuery,Webframework,jquery/jquery,2025,0.2409968684759916,-0.153357689631176,216,True,True,2,双源收缩
+Express,Webframework,expressjs/express,2025,0.2048538622129436,-0.090857689631176,1002,True,True,2,双源收缩
+Spring Boot,Webframework,spring-projects/spring-boot,2025,0.1514004871259568,-0.0421885873347251,6369,True,True,2,双源收缩
+Flask,Webframework,pallets/flask,2025,0.1481384829505915,-0.0631089074460682,267,True,True,2,双源收缩
+Laravel,Webframework,laravel/framework,2025,0.0918145441892832,-0.0264874739039665,8204,True,True,2,双源收缩
+H2,Database,h2database/h2database,2025,0.0509980430528375,-0.0267318982387475,313,True,True,2,双源收缩
+Redis,Database,redis/redis,2025,0.2863405088062622,-0.050958904109589,3037,False,True,1,评论单源警报
+Vue,Webframework,vuejs/core,2025,0.1810194850382741,-0.0280967292971468,4097,False,True,1,评论单源警报
+FastAPI,Webframework,fastapi/fastapi,2025,0.1524008350730689,-0.025313152400835,3444,False,True,1,评论单源警报
+Svelte,Webframework,sveltejs/svelte,2025,0.0746781489213639,0.0358820459290187,8698,False,True,1,评论单源警报
+Ruby,Language,ruby/ruby,2025,0.064601686085062,-0.0144927536231884,3244,True,False,1,问卷单源警报
+Deno,Webframework,denoland/deno,2025,0.0417536534446764,0.0230514961725817,7158,False,True,1,评论单源警报
+InfluxDB,Database,influxdata/influxdb,2025,0.0376908023483366,-0.0094716242661448,1757,True,False,1,问卷单源警报
+DuckDB,Database,duckdb/duckdb,2025,0.0337769080234833,0.022426614481409,8669,False,True,1,评论单源警报
+Fastify,Webframework,fastify/fastify,2025,0.0300974251913709,-0.0031315240083507,1576,False,True,1,评论单源警报
+Neo4j,Database,neo4j/neo4j,2025,0.0270450097847358,0.0109980430528375,484,False,True,1,评论单源警报
+Elixir,Language,elixir-lang/elixir,2025,0.0267437087556439,0.0306589624577689,2259,False,True,1,评论单源警报
+Scala,Language,scala/scala,2025,0.0266174102491238,0.0025575447570332,566,False,True,1,评论单源警报
+Erlang,Language,erlang/otp,2025,0.0146822013829686,0.0155031416753496,3651,False,True,1,评论单源警报
+F#,Language,dotnet/fsharp,2025,0.0128192984117962,0.0158504625682801,3258,False,True,1,评论单源警报
+OCaml,Language,ocaml/ocaml,2025,0.0115878879732247,0.0156925894351299,4314,False,True,1,评论单源警报
+Kotlin,Language,JetBrains/kotlin,2025,0.1079852230747371,0.0115563133465946,790,False,False,0,暂无收缩信号
+NestJS,Webframework,nestjs/nest,2025,0.0694154488517745,-0.009786012526096,3291,False,False,0,暂无收缩信号
+Phoenix,Webframework,phoenixframework/phoenix,2025,0.0247042449547668,0.0139178844815587,1103,False,False,0,暂无收缩信号
